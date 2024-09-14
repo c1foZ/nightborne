@@ -7,7 +7,7 @@ export default class GameScene extends Phaser.Scene {
 
   create() {
     this.matter.world.setBounds(0, 0, 1280, 720);
-    this.player = new Player(this, 200, 550, "player");
+    this.player = new Player(this, 100, 550, "player");
   }
 
   update() {
