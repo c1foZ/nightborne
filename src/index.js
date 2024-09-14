@@ -5,11 +5,12 @@ const config = {
   type: Phaser.AUTO,
   width: 1280,
   height: 720,
-  backgroundColor: "#cf7800",
+  backgroundColor: "#420075",
   physics: {
-    default: "arcade",
-    arcade: {
-      gravity: { y: 100 },
+    default: "matter",
+    matter: {
+      gravity: { y: 7 },
+      debug: true, // Enable debug mode for Matter.js
     },
   },
   scene: [PreloadScene, GameScene],
