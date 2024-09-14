@@ -1,4 +1,5 @@
 import Player from "../objects/player.js";
+import { createGround } from "../objects/ground.js";
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -7,7 +8,8 @@ export default class GameScene extends Phaser.Scene {
 
   create() {
     this.matter.world.setBounds(0, 0, 1280, 720);
-    this.player = new Player(this, 100, 550, "player");
+    createGround(this);
+    this.player = new Player(this, 100, 560, "player");
   }
 
   update() {

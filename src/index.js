@@ -9,8 +9,8 @@ const config = {
   physics: {
     default: "matter",
     matter: {
-      gravity: { y: 7 },
-      debug: true, // Enable debug mode for Matter.js
+      gravity: { y: 1 },
+      debug: true,
     },
   },
   scene: [PreloadScene, GameScene],
