@@ -8,6 +8,7 @@ export default class Ground extends Phaser.Physics.Matter.Sprite {
     this.setStatic(true);
     this.setDisplaySize(width, height);
     this.setRectangle(width, height);
+    this.body.label = "ground";
   }
 }
 
