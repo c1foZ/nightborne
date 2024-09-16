@@ -12,7 +12,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     this.isJumping = false;
     this.isGrounded = false;
 
-    this.setRectangle(100, 100);
+    this.setRectangle(30, 50);
     this.setDisplaySize(100, 70);
     this.setBounce(0.05);
     this.setFixedRotation();

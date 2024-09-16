@@ -9,7 +9,7 @@ const config = {
     width: 1280,
     height: 720,
   },
-  backgroundColor: "#420075",
+  backgroundColor: "#1c0c01",
   physics: {
     default: "matter",
     matter: {
