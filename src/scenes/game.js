@@ -6,20 +6,13 @@ export default class GameScene extends Phaser.Scene {
     super({ key: "GameScene" });
   }
 
-  preload() {
-    this.load.image("player", "assets/images/player.png");
-    this.load.image("groundTexture", "assets/images/ground.png");
-    this.load.image("background", "assets/images/background.png");
-
-    this.load.spritesheet(
-      "player_spritesheet",
-      "assets/images/player_spritesheet.png",
-      { frameWidth: 80, frameHeight: 80 }
-    );
-  }
-
   create() {
     const { width, height } = this.sys.game.config;
+    const startingX = 100;
+    const startingY = 560;
+    const idleAnim = "idle_spritesheet";
+    const runAnim = "run_spritesheet";
+    const attackAnim = "attack_spritesheet";
 
     this.add
       .image(width / 2, height / 2, "background")
@@ -29,18 +22,38 @@ export default class GameScene extends Phaser.Scene {
 
     this.matter.world.setBounds(0, 0, width, height);
 
-    createGround(this);
-
-    this.anims.create({
+    const idle = {
       key: "idle",
-      frames: this.anims.generateFrameNames("player_spritesheet", {
-        frames: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+      frames: this.anims.generateFrameNames(idleAnim, {
+        frames: [0, 1, 2, 3, 4, 5, 6, 7, 8],
       }),
       frameRate: 15,
       repeat: -1,
-    });
+    };
+    this.anims.create(idle);
 
-    this.player = new Player(this, 100, 560, "player_spritesheet");
+    const run = {
+      key: "run",
+      frames: this.anims.generateFrameNames(runAnim, {
+        frames: [0, 1, 2, 3, 4, 5],
+      }),
+      frameRate: 15,
+      repeat: -1,
+    };
+    this.anims.create(run);
+
+    const attack = {
+      key: "attack",
+      frames: this.anims.generateFrameNames(attackAnim, {
+        frames: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+      }),
+      frameRate: 15,
+    };
+    this.anims.create(attack);
+
+    createGround(this);
+
+    this.player = new Player(this, startingX, startingY, idleAnim);
     this.player.play("idle");
   }
 

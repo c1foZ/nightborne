@@ -3,14 +3,16 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     super(scene.matter.world, x, y, texture);
     scene.add.existing(this);
 
-    this.speed = 5;
-    this.maxSpeed = 10;
+    this.speed = 3;
+    this.maxSpeed = 5;
     this.acceleration = 0.5;
     this.friction = 0.06;
 
     this.jumpForce = -10;
     this.isJumping = false;
     this.isGrounded = false;
+
+    this.isAttacking = false;
 
     this.setRectangle(30, 50);
     this.setDisplaySize(100, 70);
@@ -33,6 +35,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP),
         scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
       ],
+      attack: [scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.J)],
     };
 
     this.scene.matter.world.on("collisionactive", (event) => {
@@ -71,12 +74,23 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
       this.setVelocityX(
         Phaser.Math.Clamp(velocity.x - this.acceleration, -this.maxSpeed, 0)
       );
+      if (!this.isAttacking && this.anims.currentAnim.key !== "run") {
+        this.play("run", true);
+      }
+      this.setFlipX(true);
     } else if (this.isAnyKeyDown(this.cursors.right)) {
       this.setVelocityX(
         Phaser.Math.Clamp(velocity.x + this.acceleration, 0, this.maxSpeed)
       );
+      if (!this.isAttacking && this.anims.currentAnim.key !== "run") {
+        this.play("run", true);
+      }
+      this.setFlipX(false);
     } else {
       this.setVelocityX(velocity.x * (1 - this.friction));
+      if (!this.isAttacking && this.anims.currentAnim.key !== "idle") {
+        this.play("idle", true);
+      }
     }
 
     if (
@@ -90,6 +104,15 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
     if (this.isGrounded) {
       this.isJumping = false;
+    }
+
+    if (this.isAnyKeyDown(this.cursors.attack) && !this.isAttacking) {
+      this.isAttacking = true;
+      this.play("attack", true);
+
+      this.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
+        this.isAttacking = false;
+      });
     }
   }
 }
