@@ -9,7 +9,7 @@ export default class GameScene extends Phaser.Scene {
   create() {
     const { width, height } = this.sys.game.config;
     const startingX = 100;
-    const startingY = 560;
+    const startingY = 800;
     const idleAnim = "idle_spritesheet";
     const runAnim = "run_spritesheet";
     const attackAnim = "attack_spritesheet";

@@ -6,15 +6,19 @@ const config = {
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
-    width: 1280,
-    height: 720,
+    width: 1920,
+    height: 1080,
   },
+  fps: {
+    target: 60,
+  },
+  pixelArt: true,
   backgroundColor: "#1c0c01",
   physics: {
     default: "matter",
     matter: {
       gravity: { y: 1 },
-      debug: true,
+      debug: false,
     },
   },
   scene: [PreloadScene, GameScene],
