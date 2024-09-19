@@ -14,8 +14,18 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
     this.isAttacking = false;
 
-    this.setRectangle(30, 50);
+    this.setRectangle(20, 25);
     this.setDisplaySize(100, 70);
+    let offset = {
+      x: 0,
+      y: -9,
+    };
+    let body = this.body;
+    body.position.x += offset.x;
+    body.position.y += offset.y;
+    body.positionPrev.x += offset.x;
+    body.positionPrev.y += offset.y;
+
     this.setBounce(0.05);
     this.setFixedRotation();
     this.setFrictionAir(0.01);
