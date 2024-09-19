@@ -54,6 +54,7 @@ export default class GameScene extends Phaser.Scene {
     createGround(this);
 
     this.player = new Player(this, startingX, startingY, idleAnim);
+    this.player.setScale(3);
     this.player.play("idle");
   }
 
