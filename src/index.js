@@ -22,6 +22,12 @@ const config = {
     },
   },
   scene: [PreloadScene, GameScene],
+  fx: {
+    glow: {
+      distance: 1,
+      quality: 0.2,
+    },
+  },
 };
 
 const game = new Phaser.Game(config);
