@@ -22,6 +22,9 @@ export default class GameScene extends Phaser.Scene {
 
     this.matter.world.setBounds(0, 0, width, height);
 
+    const enemy = this.add.image(900, 900, "enemy");
+    enemy.setScale(4);
+
     const idle = {
       key: "idle",
       frames: this.anims.generateFrameNames(idleAnim, {
