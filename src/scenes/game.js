@@ -1,5 +1,6 @@
-import Player from "../objects/player.js";
 import { createGround } from "../objects/ground.js";
+import Player from "../objects/player.js";
+import Enemy from "../objects/enemy.js";
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -21,9 +22,6 @@ export default class GameScene extends Phaser.Scene {
       .setScrollFactor(0);
 
     this.matter.world.setBounds(0, 0, width, height);
-
-    const enemy = this.add.image(900, 900, "enemy");
-    enemy.setScale(4);
 
     const idle = {
       key: "idle",
@@ -59,10 +57,35 @@ export default class GameScene extends Phaser.Scene {
     this.player = new Player(this, startingX, startingY, idleAnim);
     this.player.setScale(3);
     this.player.play("idle");
-    const fx = this.player.preFX.addGlow();
+    this.player.postFX.addGlow(undefined, undefined, undefined, false, 0.1, 1);
+
+    this.enemy = new Enemy(this, 1520, 700, "enemy", this.player);
+    this.enemy.setScale(4);
+    let glowOn = true;
+    this.time.addEvent({
+      delay: 300,
+      repeat: 10,
+      callback: () => {
+        if (glowOn) {
+          this.enemy.postFX.clear();
+        } else {
+          this.enemy.postFX.addGlow(
+            0xff0000,
+            undefined,
+            undefined,
+            false,
+            0.2,
+            5
+          );
+        }
+        glowOn = !glowOn;
+      },
+      callbackScope: this,
+    });
   }
 
   update() {
     this.player.update();
+    this.enemy.update();
   }
 }
