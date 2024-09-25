@@ -21,7 +21,7 @@ export default class Enemy extends Phaser.Physics.Matter.Sprite {
     this.setBounce(0.05);
     this.setFixedRotation();
     this.setFrictionAir(0.01);
-    this.setFriction(0.1); // Increase friction to simulate ground movement
+    this.setFriction(0.1);
   }
 
   update() {
@@ -30,6 +30,13 @@ export default class Enemy extends Phaser.Physics.Matter.Sprite {
     let directionX = playerX - this.x;
     let distance = Math.abs(directionX);
     let walkDirection = directionX / distance;
+
+    if (walkDirection > 0) {
+      this.setFlipX(false);
+    } else {
+      this.setFlipX(true);
+    }
+
     if (this.body.velocity.y === 0) {
       this.setVelocityX(walkDirection * this.speed);
     } else {

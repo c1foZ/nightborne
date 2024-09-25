@@ -14,6 +14,7 @@ export default class GameScene extends Phaser.Scene {
     const idleAnim = "idle_spritesheet";
     const runAnim = "run_spritesheet";
     const attackAnim = "attack_spritesheet";
+    const enemyAnim = "enemy_walk_spritesheet";
 
     this.add
       .image(width / 2, height / 2, "background")
@@ -52,6 +53,16 @@ export default class GameScene extends Phaser.Scene {
     };
     this.anims.create(attack);
 
+    const enemyWalk = {
+      key: "enemyWalk",
+      frames: this.anims.generateFrameNames(enemyAnim, {
+        frames: [0, 1, 2, 3],
+      }),
+      frameRate: 15,
+      repeat: -1,
+    };
+    this.anims.create(enemyWalk);
+
     createGround(this);
 
     this.player = new Player(this, startingX, startingY, idleAnim);
@@ -59,8 +70,9 @@ export default class GameScene extends Phaser.Scene {
     this.player.play("idle");
     this.player.postFX.addGlow(undefined, undefined, undefined, false, 0.1, 1);
 
-    this.enemy = new Enemy(this, 1520, 700, "enemy", this.player);
+    this.enemy = new Enemy(this, 1520, 700, enemyAnim, this.player);
     this.enemy.setScale(4);
+    this.enemy.play("enemyWalk");
     let glowOn = true;
     this.time.addEvent({
       delay: 300,
