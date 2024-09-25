@@ -3,8 +3,8 @@ export default class Enemy extends Phaser.Physics.Matter.Sprite {
     super(scene.matter.world, x, y, texture);
     scene.add.existing(this);
 
-    this.player = player; // Reference to the player
-    this.speed = 2; // Speed of the enemy
+    this.player = player;
+    this.speed = 2;
     this.setRectangle(10, 25);
     this.setDisplaySize(100, 70);
 
