@@ -8,16 +8,6 @@ export default class Enemy extends Phaser.Physics.Matter.Sprite {
     this.setRectangle(10, 25);
     this.setDisplaySize(100, 70);
 
-    let offsetOfRectangle = {
-      x: -5,
-      y: 0,
-    };
-    let body = this.body;
-    body.position.x += offsetOfRectangle.x;
-    body.position.y += offsetOfRectangle.y;
-    body.positionPrev.x += offsetOfRectangle.x;
-    body.positionPrev.y += offsetOfRectangle.y;
-
     this.setBounce(0.05);
     this.setFixedRotation();
     this.setFrictionAir(0.01);
