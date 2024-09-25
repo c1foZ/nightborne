@@ -1,7 +1,9 @@
 export default class Player extends Phaser.Physics.Matter.Sprite {
-  constructor(scene, x, y, texture) {
+  constructor(scene, x, y, texture, enemy) {
     super(scene.matter.world, x, y, texture);
     scene.add.existing(this);
+
+    this.enemy = enemy;
 
     this.speed = 3;
     this.maxSpeed = 5;
@@ -122,6 +124,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
       this.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
         this.isAttacking = false;
+        this.enemy.destroy();
       });
     }
   }

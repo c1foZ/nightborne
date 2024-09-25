@@ -15,6 +15,7 @@ export default class Enemy extends Phaser.Physics.Matter.Sprite {
   }
 
   update() {
+    if (!this.body) return;
     if (!this.player) return;
     let playerX = this.player.x;
     let directionX = playerX - this.x;

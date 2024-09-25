@@ -65,12 +65,13 @@ export default class GameScene extends Phaser.Scene {
 
     createGround(this);
 
-    this.player = new Player(this, startingX, startingY, idleAnim);
+    this.player = new Player(this, startingX, startingY, idleAnim, null);
     this.player.setScale(3);
     this.player.play("idle");
     this.player.postFX.addGlow(undefined, undefined, undefined, false, 0.1, 1);
 
     this.enemy = new Enemy(this, 1520, 700, enemyAnim, this.player);
+    this.player.enemy = this.enemy;
     this.enemy.setScale(4);
     this.enemy.play("enemyWalk");
     let glowOn = true;
