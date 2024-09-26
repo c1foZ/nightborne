@@ -58,6 +58,10 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
           if (otherBody.label === "ground") {
             this.isGrounded = true;
           }
+
+          if (this.isAttacking && otherBody.label === "enemy") {
+            this.handleSwordHit(otherBody);
+          }
         }
       });
     });
@@ -77,6 +81,13 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
   isAnyKeyDown(keys) {
     return keys.some((key) => key.isDown);
+  }
+
+  handleSwordHit(otherBody) {
+    if (otherBody.label === "enemy") {
+      otherBody.gameObject.destroy();
+      console.log("Enemy destroyed!");
+    }
   }
 
   update() {
@@ -122,9 +133,25 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
       this.isAttacking = true;
       this.play("attack", true);
 
+      this.scene.time.delayedCall(500, () => {
+        this.swordHitBox = this.scene.add.rectangle(
+          0,
+          0,
+          70,
+          120,
+          0xffffff,
+          0.5
+        );
+        this.swordHitBox.x = this.x + (this.flipX ? -70 : 70);
+        this.swordHitBox.y = this.y;
+        console.log(this.swordHitBox);
+      });
+
       this.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
         this.isAttacking = false;
-        this.enemy.destroy();
+        if (this.swordHitBox) {
+          this.swordHitBox.destroy();
+        }
       });
     }
   }

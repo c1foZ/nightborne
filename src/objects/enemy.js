@@ -12,6 +12,7 @@ export default class Enemy extends Phaser.Physics.Matter.Sprite {
     this.setFixedRotation();
     this.setFrictionAir(0.01);
     this.setFriction(0.1);
+    this.body.label = "enemy";
   }
 
   update() {
