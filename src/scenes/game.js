@@ -5,6 +5,7 @@ import Enemy from "../objects/enemy.js";
 export default class GameScene extends Phaser.Scene {
   constructor() {
     super({ key: "GameScene" });
+    this.enemies = [];
   }
 
   create() {
@@ -61,7 +62,7 @@ export default class GameScene extends Phaser.Scene {
 
     createGround(this);
 
-    this.player = new Player(this, startingX, startingY, idleAnim, null);
+    this.player = new Player(this, startingX, startingY, idleAnim);
     this.player.setScale(3);
     this.player.play("idle");
     this.player.postFX.addGlow(undefined, undefined, undefined, false, 0.1, 1);
@@ -71,9 +72,9 @@ export default class GameScene extends Phaser.Scene {
   }
 
   createEnemy(x, y) {
-    this.enemy = new Enemy(this, x, y, "enemy_walk_spritesheet", this.player);
-    this.enemy.setScale(4);
-    this.enemy.play("enemyWalk");
+    const enemy = new Enemy(this, x, y, "enemy_walk_spritesheet", this.player);
+    enemy.setScale(4);
+    enemy.play("enemyWalk");
 
     let glowOn = true;
     this.time.addEvent({
@@ -81,29 +82,23 @@ export default class GameScene extends Phaser.Scene {
       repeat: 10,
       callback: () => {
         if (glowOn) {
-          this.enemy.postFX.clear();
+          enemy.postFX.clear();
         } else {
-          this.enemy.postFX.addGlow(
-            0xff0000,
-            undefined,
-            undefined,
-            false,
-            0.2,
-            5
-          );
+          enemy.postFX.addGlow(0xff0000, undefined, undefined, false, 0.2, 5);
         }
         glowOn = !glowOn;
       },
       callbackScope: this,
     });
 
-    this.player.enemy = this.enemy;
+    this.enemies.push(enemy);
   }
 
   update() {
     this.player.update();
-    if (this.enemy) {
-      this.enemy.update();
-    }
+
+    this.enemies.forEach((enemy) => {
+      enemy.update();
+    });
   }
 }

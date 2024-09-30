@@ -1,9 +1,7 @@
 export default class Player extends Phaser.Physics.Matter.Sprite {
-  constructor(scene, x, y, texture, enemy) {
+  constructor(scene, x, y, texture) {
     super(scene.matter.world, x, y, texture);
     scene.add.existing(this);
-
-    this.enemy = enemy;
 
     this.speed = 3;
     this.maxSpeed = 5;
@@ -19,10 +17,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
     this.setRectangle(20, 25);
     this.setDisplaySize(100, 70);
-    let offsetOfRectangle = {
-      x: 0,
-      y: -9,
-    };
+    let offsetOfRectangle = { x: 0, y: -9 };
     let body = this.body;
     body.position.x += offsetOfRectangle.x;
     body.position.y += offsetOfRectangle.y;
@@ -51,41 +46,46 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
       attack: [scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.J)],
     };
 
-    this.scene.matter.world.on("collisionactive", (event) => {
-      event.pairs.forEach(({ bodyA, bodyB }) => {
-        if (bodyA === this.body || bodyB === this.body) {
-          const otherBody = bodyA === this.body ? bodyB : bodyA;
-
-          if (otherBody.label === "ground") {
-            this.isGrounded = true;
-          }
-        }
-
-        // Handle sword hitbox collision with enemy
-        if (
-          (bodyA === this.swordHitBox && bodyB === this.enemy.body) ||
-          (bodyB === this.swordHitBox && bodyA === this.enemy.body)
-        ) {
-          this.handleSwordHit(this.enemy.body);
-        }
-      });
-    });
-
-    this.scene.matter.world.on("collisionend", (event) => {
-      event.pairs.forEach(({ bodyA, bodyB }) => {
-        if (bodyA === this.body || bodyB === this.body) {
-          const otherBody = bodyA === this.body ? bodyB : bodyA;
-
-          if (otherBody.label === "ground") {
-            this.isGrounded = false;
-          }
-        }
-      });
-    });
+    this.scene.matter.world.on("collisionactive", this.handleCollisions, this);
+    this.scene.matter.world.on("collisionend", this.handleCollisionEnd, this);
   }
 
   isAnyKeyDown(keys) {
     return keys.some((key) => key.isDown);
+  }
+
+  handleCollisions(event) {
+    event.pairs.forEach(({ bodyA, bodyB }) => {
+      const otherBody = bodyA === this.body ? bodyB : bodyA;
+
+      if (bodyA === this.body || bodyB === this.body) {
+        if (otherBody.label === "ground") {
+          this.isGrounded = true;
+        }
+      }
+
+      if (this.swordHitBox) {
+        const enemies = this.scene.enemies || [];
+        enemies.forEach((enemy) => {
+          if (
+            (bodyA === this.swordHitBox && bodyB === enemy.body) ||
+            (bodyB === this.swordHitBox && bodyA === enemy.body)
+          ) {
+            this.handleSwordHit(enemy.body);
+          }
+        });
+      }
+    });
+  }
+
+  handleCollisionEnd(event) {
+    event.pairs.forEach(({ bodyA, bodyB }) => {
+      const otherBody = bodyA === this.body ? bodyB : bodyA;
+
+      if (otherBody.label === "ground") {
+        this.isGrounded = false;
+      }
+    });
   }
 
   handleSwordHit(enemyBody) {
