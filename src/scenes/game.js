@@ -24,44 +24,40 @@ export default class GameScene extends Phaser.Scene {
 
     this.matter.world.setBounds(0, 0, width, height);
 
-    const idle = {
+    this.anims.create({
       key: "idle",
       frames: this.anims.generateFrameNames(idleAnim, {
         frames: [0, 1, 2, 3, 4, 5, 6, 7, 8],
       }),
       frameRate: 15,
       repeat: -1,
-    };
-    this.anims.create(idle);
+    });
 
-    const run = {
+    this.anims.create({
       key: "run",
       frames: this.anims.generateFrameNames(runAnim, {
         frames: [0, 1, 2, 3, 4, 5],
       }),
       frameRate: 15,
       repeat: -1,
-    };
-    this.anims.create(run);
+    });
 
-    const attack = {
+    this.anims.create({
       key: "attack",
       frames: this.anims.generateFrameNames(attackAnim, {
         frames: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
       }),
       frameRate: 15,
-    };
-    this.anims.create(attack);
+    });
 
-    const enemyWalk = {
+    this.anims.create({
       key: "enemyWalk",
       frames: this.anims.generateFrameNames(enemyAnim, {
         frames: [0, 1, 2, 3],
       }),
       frameRate: 15,
       repeat: -1,
-    };
-    this.anims.create(enemyWalk);
+    });
 
     createGround(this);
 
@@ -70,10 +66,15 @@ export default class GameScene extends Phaser.Scene {
     this.player.play("idle");
     this.player.postFX.addGlow(undefined, undefined, undefined, false, 0.1, 1);
 
-    this.enemy = new Enemy(this, 1520, 700, enemyAnim, this.player);
-    this.player.enemy = this.enemy;
+    this.createEnemy(1520, 700);
+    this.createEnemy(1720, 700);
+  }
+
+  createEnemy(x, y) {
+    this.enemy = new Enemy(this, x, y, "enemy_walk_spritesheet", this.player);
     this.enemy.setScale(4);
     this.enemy.play("enemyWalk");
+
     let glowOn = true;
     this.time.addEvent({
       delay: 300,
@@ -95,10 +96,14 @@ export default class GameScene extends Phaser.Scene {
       },
       callbackScope: this,
     });
+
+    this.player.enemy = this.enemy;
   }
 
   update() {
     this.player.update();
-    this.enemy.update();
+    if (this.enemy) {
+      this.enemy.update();
+    }
   }
 }

@@ -145,7 +145,12 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
             this.y,
             70,
             120,
-            { isSensor: true, ignoreGravity: true, label: "swordHitBox" }
+            {
+              isStatic: true,
+              isSensor: true,
+              ignoreGravity: true,
+              label: "swordHitBox",
+            }
           );
         } else {
           this.swordHitBox.position.x = this.x + (this.flipX ? -70 : 70);
