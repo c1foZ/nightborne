@@ -15,6 +15,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     this.isGrounded = false;
 
     this.isAttacking = false;
+    this.swordHitBox = null;
 
     this.setRectangle(20, 25);
     this.setDisplaySize(100, 70);
@@ -58,10 +59,14 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
           if (otherBody.label === "ground") {
             this.isGrounded = true;
           }
+        }
 
-          if (this.isAttacking && otherBody.label === "enemy") {
-            this.handleSwordHit(otherBody);
-          }
+        // Handle sword hitbox collision with enemy
+        if (
+          (bodyA === this.swordHitBox && bodyB === this.enemy.body) ||
+          (bodyB === this.swordHitBox && bodyA === this.enemy.body)
+        ) {
+          this.handleSwordHit(this.enemy.body);
         }
       });
     });
@@ -83,9 +88,9 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     return keys.some((key) => key.isDown);
   }
 
-  handleSwordHit(otherBody) {
-    if (otherBody.label === "enemy") {
-      otherBody.gameObject.destroy();
+  handleSwordHit(enemyBody) {
+    if (enemyBody.label === "enemy") {
+      enemyBody.gameObject.destroy();
       console.log("Enemy destroyed!");
     }
   }
@@ -134,23 +139,25 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
       this.play("attack", true);
 
       this.scene.time.delayedCall(500, () => {
-        this.swordHitBox = this.scene.add.rectangle(
-          0,
-          0,
-          70,
-          120,
-          0xffffff,
-          0.5
-        );
-        this.swordHitBox.x = this.x + (this.flipX ? -70 : 70);
-        this.swordHitBox.y = this.y;
-        console.log(this.swordHitBox);
+        if (!this.swordHitBox) {
+          this.swordHitBox = this.scene.matter.add.rectangle(
+            this.x + (this.flipX ? -70 : 70),
+            this.y,
+            70,
+            120,
+            { isSensor: true, ignoreGravity: true, label: "swordHitBox" }
+          );
+        } else {
+          this.swordHitBox.position.x = this.x + (this.flipX ? -70 : 70);
+          this.swordHitBox.position.y = this.y;
+        }
       });
 
       this.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
         this.isAttacking = false;
         if (this.swordHitBox) {
-          this.swordHitBox.destroy();
+          this.scene.matter.world.remove(this.swordHitBox);
+          this.swordHitBox = null;
         }
       });
     }
