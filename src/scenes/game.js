@@ -68,7 +68,15 @@ export default class GameScene extends Phaser.Scene {
     this.player.postFX.addGlow(undefined, undefined, undefined, false, 0.1, 1);
 
     this.createEnemy(1520, 700);
-    this.createEnemy(1720, 700);
+    this.createEnemy(1720, 300);
+
+    this.time.addEvent({
+      delay: 5000,
+      callback: () => {
+        this.createEnemy(1720, 300);
+      },
+      loop: true,
+    });
   }
 
   createEnemy(x, y) {
