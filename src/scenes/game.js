@@ -85,10 +85,14 @@ export default class GameScene extends Phaser.Scene {
     enemy.play("enemyWalk");
 
     let glowOn = true;
-    this.time.addEvent({
+    enemy.glowEvent = this.time.addEvent({
       delay: 300,
       repeat: 10,
       callback: () => {
+        if (!enemy.active) {
+          enemy.glowEvent.remove(false);
+          return;
+        }
         if (glowOn) {
           enemy.postFX.clear();
         } else {
