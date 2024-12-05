@@ -39,32 +39,6 @@ export default class Enemy extends Phaser.Physics.Matter.Sprite {
     if (Math.abs(directionX) < 100) {
       this.play("enemyAttack", true);
       console.log("I will kill you!");
-      this.scene.time.delayedCall(500, () => {
-        if (!this.enemyHitBox) {
-          this.enemyHitBox = this.scene.matter.add.rectangle(
-            this.x + (this.flipX ? -70 : 70),
-            this.y,
-            70,
-            120,
-            {
-              isStatic: true,
-              isSensor: true,
-              ignoreGravity: true,
-              label: "enemyHitBox",
-            }
-          );
-        } else {
-          this.enemyHitBox.position.x = this.x + (this.flipX ? -70 : 70);
-          this.enemyHitBox.position.y = this.y;
-        }
-
-        // this.scene.time.delayedCall(100, () => {
-        //   if (this.enemyHitBox) {
-        //     this.scene.matter.world.remove(this.enemyHitBox);
-        //     this.enemyHitBox = null;
-        //   }
-        // });
-      });
     } else {
       this.play("enemyWalk", true);
     }
