@@ -40,6 +40,15 @@ export default class PreloadScene extends Phaser.Scene {
         frameHeight: 80,
       }
     );
+
+    this.load.spritesheet(
+      "death_spritesheet",
+      "assets/images/death_spritesheet.png",
+      {
+        frameWidth: 80,
+        frameHeight: 80,
+      }
+    );
   }
 
   create() {

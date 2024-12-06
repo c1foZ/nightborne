@@ -88,8 +88,10 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     event.pairs.forEach(({ bodyA, bodyB }) => {
       const otherBody = bodyA === this.body ? bodyB : bodyA;
 
-      if (otherBody.label === "ground") {
-        this.isGrounded = true;
+      if (bodyA === this.body || bodyB === this.body) {
+        if (otherBody.label === "ground") {
+          this.isGrounded = true;
+        }
       }
 
       if (this.swordHitBox) {

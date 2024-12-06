@@ -17,6 +17,7 @@ export default class GameScene extends Phaser.Scene {
     const attackAnim = "attack_spritesheet";
     const enemyAnim = "enemy_walk_spritesheet";
     const enemyAttackAnim = "enemy_attack_spritesheet";
+    const deathAnim = "death_spritesheet";
 
     this.add
       .image(width / 2, height / 2, "background")
@@ -65,6 +66,17 @@ export default class GameScene extends Phaser.Scene {
       key: "enemyAttack",
       frames: this.anims.generateFrameNames(enemyAttackAnim, {
         frames: [0, 1, 2, 3, 4, 5, 6, 7],
+      }),
+      frameRate: 15,
+    });
+
+    this.anims.create({
+      key: "death",
+      frames: this.anims.generateFrameNames(deathAnim, {
+        frames: [
+          0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+          20, 21, 22,
+        ],
       }),
       frameRate: 15,
     });
