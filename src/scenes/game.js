@@ -76,6 +76,12 @@ export default class GameScene extends Phaser.Scene {
     this.player.play("idle");
     this.player.postFX.addGlow(undefined, undefined, undefined, false, 0.1, 1);
 
+    // Create Health Display
+    this.healthText = this.add.text(16, 16, `Health: ${this.player.health}`, {
+      fontSize: "32px",
+      fill: "#fff",
+    });
+
     this.createEnemy(1520, 700);
     this.createEnemy(1720, 300);
 
@@ -117,6 +123,8 @@ export default class GameScene extends Phaser.Scene {
 
   update() {
     this.player.update();
+
+    this.healthText.setText(`Health: ${this.player.health}`);
 
     this.enemies.forEach((enemy) => {
       enemy.update();

@@ -3,8 +3,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     super(scene.matter.world, x, y, texture);
     scene.add.existing(this);
 
-    this.health = 100; // Initialize player health
-    this.isDead = false; // Track if the player is dead
+    this.health = 100;
+    this.isDead = false;
 
     this.speed = 3;
     this.maxSpeed = 5;
@@ -59,6 +59,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     this.health -= amount;
     console.log(`Player health: ${this.health}`);
 
+    this.scene.healthText.setText(`Health: ${this.health}`);
+
     if (this.health <= 0) {
       this.die();
     }
@@ -72,6 +74,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     this.play("death");
 
     this.scene.time.delayedCall(2000, () => {
+      this.health = 100;
+      this.scene.healthText.setText(`Health: ${this.health}`);
       this.scene.scene.restart();
     });
   }
