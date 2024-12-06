@@ -52,18 +52,17 @@ export default class Enemy extends Phaser.Physics.Matter.Sprite {
     this.setVelocityX(0);
     this.play("enemyAttack", true);
 
-    // Detect collision with the player
-    const overlap = Phaser.Geom.Intersects.RectangleToRectangle(
-      this.getBounds(),
-      this.player.getBounds()
-    );
+    this.once("animationcomplete-enemyAttack", () => {
+      const overlap = Phaser.Geom.Intersects.RectangleToRectangle(
+        this.getBounds(),
+        this.player.getBounds()
+      );
 
-    if (overlap) {
-      this.player.takeDamage(20); // Reduce player's health by 20
-      console.log("Player hit by enemy!");
-    }
+      if (overlap) {
+        this.player.takeDamage(20);
+        console.log("Player hit by enemy!");
+      }
 
-    this.scene.time.delayedCall(500, () => {
       this.isAttacking = false;
     });
   }
