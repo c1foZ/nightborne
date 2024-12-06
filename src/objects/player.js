@@ -3,6 +3,9 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     super(scene.matter.world, x, y, texture);
     scene.add.existing(this);
 
+    this.health = 100; // Initialize player health
+    this.isDead = false; // Track if the player is dead
+
     this.speed = 3;
     this.maxSpeed = 5;
     this.acceleration = 0.5;
@@ -50,6 +53,29 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     this.scene.matter.world.on("collisionend", this.handleCollisionEnd, this);
   }
 
+  takeDamage(amount) {
+    if (this.isDead) return;
+
+    this.health -= amount;
+    console.log(`Player health: ${this.health}`);
+
+    if (this.health <= 0) {
+      this.die();
+    }
+  }
+
+  die() {
+    this.isDead = true;
+    console.log("Player is dead!");
+    this.setTint(0xff0000);
+    this.setVelocity(0, 0);
+    this.play("death");
+
+    this.scene.time.delayedCall(2000, () => {
+      this.scene.scene.restart();
+    });
+  }
+
   isAnyKeyDown(keys) {
     return keys.some((key) => key.isDown);
   }
@@ -58,10 +84,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     event.pairs.forEach(({ bodyA, bodyB }) => {
       const otherBody = bodyA === this.body ? bodyB : bodyA;
 
-      if (bodyA === this.body || bodyB === this.body) {
-        if (otherBody.label === "ground") {
-          this.isGrounded = true;
-        }
+      if (otherBody.label === "ground") {
+        this.isGrounded = true;
       }
 
       if (this.swordHitBox) {
