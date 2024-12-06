@@ -73,7 +73,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     this.setVelocity(0, 0);
     this.play("death");
 
-    this.scene.time.delayedCall(2000, () => {
+    this.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
       this.health = 100;
       this.scene.healthText.setText(`Health: ${this.health}`);
       this.scene.scene.restart();
@@ -126,6 +126,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
   }
 
   update() {
+    if (this.isDead) return; // Skip updating if the player is dead
+
     const velocity = this.body.velocity;
 
     if (this.isAnyKeyDown(this.cursors.left)) {
